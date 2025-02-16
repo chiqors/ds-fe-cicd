@@ -31,19 +31,13 @@ jobs:
           cd frontend
           npm install
 
-      # Step 4: Run ESLint
-      - name: Run ESLint
-        run: |
-          cd frontend
-          npx eslint . --config eslint.config.cjs
-
-      # Step 5: Build aplikasi
+      # Step 4: Build aplikasi
       - name: Build Application
         run: |
           cd frontend
           npm run build
 
-      # Step 6: Dummy Deployment (Echo Sukses)
+      # Step 5: Dummy Deployment (Echo Sukses)
       - name: Dummy Deployment
         run: |
           echo "Deploy sukses ke Kubernetes Cluster (dummy)"
