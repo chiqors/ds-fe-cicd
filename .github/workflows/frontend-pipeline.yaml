@@ -39,6 +39,11 @@ jobs:
         with:
           image-ref: ds-fe
 
+      # Run Docker container
+      - name: Run Docker container
+        run: |
+          docker run -d -p 8080:80 --name ds-fe-container ds-fe
+
       # Install k6
       - name: Install k6
         run: |
