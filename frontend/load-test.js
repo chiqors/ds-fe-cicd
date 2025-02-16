@@ -10,7 +10,7 @@ export let options = {
 };
 
 export default function () {
-  let res = http.get('http://localhost:80'); // Replace with your app's URL
+  let res = http.get('http://localhost:8080'); // Updated to match the Docker container port
   check(res, { 'status was 200': (r) => r.status == 200 });
   sleep(1);
 }
