@@ -27,7 +27,10 @@ jobs:
 
       # Step 3: Install dependencies dan linting
       - name: Install Dependencies
-        run: npm install
+        run: |
+          cd frontend
+          npm install
+
 
       - name: Run ESLint
         run: npx eslint .
