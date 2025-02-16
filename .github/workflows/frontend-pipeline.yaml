@@ -1,43 +1,44 @@
-name: React CI/CD Pipeline
+name: Docker Build and Push
 
 on:
   push:
     branches:
       - main
-      - develop
-  pull_request:
-    branches:
-      - main
-      - develop
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout kode dari repository
-      - name: Checkout Code
+      # Checkout the code
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Setup Node.js
-      - name: Setup Node.js
+      # Set up Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
 
-      # Step 3: Install dependencies dan linting
-      - name: Install Dependencies
+      # Install dependencies and build the app
+      - name: Install dependencies and build
         run: |
-          cd frontend
           npm install
-
-      # Step 4: Build aplikasi
-      - name: Build Application
-        run: |
-          cd frontend
           npm run build
 
-      # Step 5: Dummy Deployment (Echo Sukses)
-      - name: Dummy Deployment
+      # Build Docker image
+      - name: Build Docker image
         run: |
-          echo "Deploy sukses ke Kubernetes Cluster (dummy)"
+          docker build -t vite-react-app .
+
+      # Push Docker image to Docker Hub (optional)
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Push Docker image
+        run: |
+          docker tag vite-react-app chiqors/frontend:v3
+          docker push chiqors/frontend:v3
