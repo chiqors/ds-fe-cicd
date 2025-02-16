@@ -35,7 +35,7 @@ jobs:
       - name: Run ESLint
         run: |
           cd frontend
-          npx eslint . --config eslint.config.js
+          npx eslint . --config eslint.config.cjs
 
       # Step 5: Build aplikasi
       - name: Build Application
