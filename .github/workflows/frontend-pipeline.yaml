@@ -31,7 +31,7 @@ jobs:
       - name: Build Docker image
         run: |
           cd frontend
-          docker build -t vite-react-app .
+          docker build -t ds-fe .
 
       # Push Docker image to Docker Hub (optional)
       - name: Log in to Docker Hub
@@ -42,5 +42,5 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker tag vite-react-app chiqors/vite-react-app:latest
-          docker push chiqors/vite-react-app:latest
+          docker tag ds-fe chiqors/ds-fe:latest
+          docker push chiqors/ds-fe:latest
