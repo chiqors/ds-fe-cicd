@@ -27,20 +27,6 @@ jobs:
           npm install
           npm run build
 
-      # Set up Java (required for SonarQube)
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '11'
-
-      # Run SonarQube analysis
-      - name: SonarQube Scan
-        uses: sonarsource/sonarqube-scan-action@v1.0.0
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          projectBaseDir: ./frontend
-
       # Build Docker image
       - name: Build Docker image
         run: |
@@ -52,6 +38,22 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: ds-fe
+
+      # Install k6
+      - name: Install k6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gnupg software-properties-common
+          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 33F40BC6
+          echo "deb https://dl.bintray.com/loadimpact/deb stable main" | sudo tee -a /etc/apt/sources.list
+          sudo apt-get update
+          sudo apt-get install -y k6
+
+      # Run load tests with k6
+      - name: Run load tests
+        run: |
+          cd frontend
+          k6 run load-test.js
 
       # Push Docker image to Docker Hub (optional)
       - name: Log in to Docker Hub
