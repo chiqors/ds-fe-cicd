@@ -23,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'
+          node-version: '18'
 
       # Step 3: Install dependencies dan linting
       - name: Install Dependencies
@@ -31,15 +31,19 @@ jobs:
           cd frontend
           npm install
 
-
+      # Step 4: Run ESLint
       - name: Run ESLint
-        run: npx eslint .
+        run: |
+          cd frontend
+          npx eslint . --config eslint.config.js
 
-      # Step 4: Build aplikasi
+      # Step 5: Build aplikasi
       - name: Build Application
-        run: npm run build
+        run: |
+          cd frontend
+          npm run build
 
-      # Step 5: Dummy Deployment (Echo Sukses)
+      # Step 6: Dummy Deployment (Echo Sukses)
       - name: Dummy Deployment
         run: |
           echo "Deploy sukses ke Kubernetes Cluster (dummy)"
