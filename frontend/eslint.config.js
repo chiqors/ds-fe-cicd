@@ -1,16 +1,16 @@
-export default [
+module.exports = [
     {
-        ignores: ['node_modules/**', 'build/**'], // Abaikan folder tertentu
+      ignores: ['node_modules/**', 'build/**'], // Abaikan folder tertentu
     },
     {
-        files: ['**/*.js', '**/*.jsx'], // File yang akan diperiksa
-        languageOptions: {
+      files: ['**/*.js', '**/*.jsx'], // File yang akan diperiksa
+      languageOptions: {
         ecmaVersion: 'latest',
         sourceType: 'module',
-        },
-        rules: {
+      },
+      rules: {
         'no-unused-vars': 'warn',
         'no-console': 'warn',
-        },
+      },
     },
-];
+  ];
