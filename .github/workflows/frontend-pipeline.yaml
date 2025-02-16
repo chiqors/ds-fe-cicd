@@ -23,13 +23,15 @@ jobs:
       # Install dependencies and build the app
       - name: Install dependencies and build
         run: |
+          cd frontend
           npm install
           npm run build
 
       # Build Docker image
       - name: Build Docker image
         run: |
-          docker build -t vite-react-app .
+          cd frontend
+          docker build -t vite-react-app ./frontend
 
       # Push Docker image to Docker Hub (optional)
       - name: Log in to Docker Hub
@@ -40,5 +42,5 @@ jobs:
 
       - name: Push Docker image
         run: |
-          docker tag vite-react-app chiqors/frontend:v3
-          docker push chiqors/frontend:v3
+          docker tag vite-react-app chiqors/vite-react-app:latest
+          docker push chiqors/vite-react-app:latest
