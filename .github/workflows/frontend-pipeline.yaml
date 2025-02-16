@@ -48,16 +48,11 @@ jobs:
       - name: Setup K6
         uses: grafana/setup-k6-action@v1
 
+      # Run load tests with k6
       - name: Run local k6 test
         uses: grafana/run-k6-action@v1
         with:
           path: frontend/load-test.js
-
-      # Run load tests with k6
-      - name: Run load tests
-        run: |
-          cd frontend
-          k6 run load-test.js
 
       # Log in to Docker Hub
       - name: Log in to Docker Hub
