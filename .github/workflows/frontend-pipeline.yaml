@@ -1,4 +1,4 @@
-name: Docker Build and Push
+name: Docker Build, Push, and Deploy
 
 on:
   push:
@@ -27,11 +27,31 @@ jobs:
           npm install
           npm run build
 
+      # Set up Java (required for SonarQube)
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '11'
+
+      # Run SonarQube analysis
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@v1.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: ./frontend
+
       # Build Docker image
       - name: Build Docker image
         run: |
           cd frontend
           docker build -t ds-fe .
+
+      # Scan Docker image with Trivy
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ds-fe
 
       # Push Docker image to Docker Hub (optional)
       - name: Log in to Docker Hub
@@ -44,3 +64,7 @@ jobs:
         run: |
           docker tag ds-fe chiqors/ds-fe:latest
           docker push chiqors/ds-fe:latest
+
+      # Simulate Kubernetes deployment
+      - name: Deploy to Kubernetes
+        run: echo "Deploy success"
