@@ -31,7 +31,7 @@ jobs:
       - name: Build Docker image
         run: |
           cd frontend
-          docker build -t vite-react-app ./frontend
+          docker build -t vite-react-app .
 
       # Push Docker image to Docker Hub (optional)
       - name: Log in to Docker Hub
