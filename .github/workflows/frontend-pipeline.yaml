@@ -1,4 +1,4 @@
-name: Docker Build, Push, and Deploy
+name: Frontend Pipeline
 
 on:
   push:
@@ -10,62 +10,69 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # # Checkout the code
-      # - name: Checkout code
-      #   uses: actions/checkout@v3
+      # Checkout the code
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # # Set up Node.js
-      # - name: Set up Node.js
-      #   uses: actions/setup-node@v3
-      #   with:
-      #     node-version: 18
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-      # # Install dependencies and build the app
-      # - name: Install dependencies and build
-      #   run: |
-      #     cd frontend
-      #     npm install
-      #     npm run build
+      # Install dependencies and build the app
+      - name: Install dependencies and build
+        run: |
+          cd frontend
+          npm install
+          npm run build
 
-      # # Build Docker image
-      # - name: Build Docker image
-      #   run: |
-      #     cd frontend
-      #     docker build -t ds-fe .
+      # Add SonarQube Analysis
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
 
-      # # Scan Docker image with Trivy
-      # - name: Scan Docker image with Trivy
-      #   uses: aquasecurity/trivy-action@master
-      #   with:
-      #     image-ref: ds-fe
+      # Build Docker image
+      - name: Build Docker image
+        run: |
+          cd frontend
+          docker build -t ds-fe .
 
-      # # Run Docker container
-      # - name: Run Docker container
-      #   run: |
-      #     docker run -d -p 8080:80 --name ds-fe-container ds-fe
+      # Scan Docker image with Trivy
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ds-fe
 
-      # # Install k6
-      # - name: Setup K6
-      #   uses: grafana/setup-k6-action@v1
+      # Run Docker container
+      - name: Run Docker container
+        run: |
+          docker run -d -p 8080:80 --name ds-fe-container ds-fe
 
-      # # Run load tests with k6
-      # - name: Run local k6 test
-      #   uses: grafana/run-k6-action@v1
-      #   with:
-      #     path: frontend/load-test.js
+      # Install k6
+      - name: Setup K6
+        uses: grafana/setup-k6-action@v1
 
-      # # Log in to Docker Hub
-      # - name: Log in to Docker Hub
-      #   uses: docker/login-action@v2
-      #   with:
-      #     username: ${{ secrets.DOCKER_USERNAME }}
-      #     password: ${{ secrets.DOCKER_PASSWORD }}
+      # Run load tests with k6
+      - name: Run local k6 test
+        uses: grafana/run-k6-action@v1
+        with:
+          path: frontend/load-test.js
 
-      # # Push Docker image to Docker Hub
-      # - name: Push Docker image
-      #   run: |
-      #     docker tag ds-fe chiqors/ds-fe:latest
-      #     docker push chiqors/ds-fe:latest
+      # Log in to Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # Push Docker image to Docker Hub
+      - name: Push Docker image
+        run: |
+          docker tag ds-fe chiqors/ds-fe:latest
+          docker push chiqors/ds-fe:latest
 
       # Simulate Kubernetes deployment
       - name: Deploy to Kubernetes
