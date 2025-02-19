@@ -40,6 +40,8 @@ jobs:
             -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
             -Dsonar.host.url=${{ vars.SONAR_HOST_URL }}
             -Dsonar.sources=./src
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.ws.timeout=300
 
       # Build Docker image
       - name: Build Docker image
