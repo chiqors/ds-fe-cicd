@@ -31,15 +31,16 @@ jobs:
 
       # SonarQube Analysis
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
         with:
           projectBaseDir: ./frontend
           args: >
             -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
             -Dsonar.host.url=${{ vars.SONAR_HOST_URL }}
+            -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
             -Dsonar.sources=./src
             -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-            -Dsonar.ws.timeout=300
+            -Dsonar.scanner.socketTimeout=300
 
       # Build Docker image
       - name: Build Docker image
