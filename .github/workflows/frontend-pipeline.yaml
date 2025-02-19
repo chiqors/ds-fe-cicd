@@ -12,7 +12,7 @@ jobs:
     steps:
       # Checkout the code
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
@@ -31,9 +31,16 @@ jobs:
 
       # SonarQube Analysis
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v4
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        with:
+          projectBaseDir: ./frontend
+          args: >
+            -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
+            -Dsonar.host.url=${{ vars.SONAR_HOST_URL }}
+            -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
+            -Dsonar.sources=./src
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+            -Dsonar.scanner.socketTimeout=300
 
       # Build Docker image
       - name: Build Docker image
