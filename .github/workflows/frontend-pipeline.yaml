@@ -38,7 +38,7 @@ jobs:
             -Dsonar.projectKey=${{ vars.SONAR_PROJECT_KEY }}
             -Dsonar.host.url=${{ vars.SONAR_HOST_URL }}
             -Dsonar.organization=${{ vars.SONAR_ORGANIZATION }}
-            -Dsonar.sources=./src
+            -Dsonar.sources=.
             -Dsonar.token=${{ secrets.SONAR_TOKEN }}
             -Dsonar.scanner.socketTimeout=300
 
