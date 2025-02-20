@@ -95,11 +95,12 @@ pipeline {
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh '''
-                        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                        docker tag ds-fe chiqors/ds-fe:latest
-                        docker push chiqors/ds-fe:latest
-                    '''
+                        sh '''
+                            echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+                            docker tag ds-fe chiqors/ds-fe:latest
+                            docker push chiqors/ds-fe:latest
+                        '''
+                    }
                 }
             }
         }
