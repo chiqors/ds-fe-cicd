@@ -4,6 +4,7 @@ pipeline {
     environment {
         SONAR_TOKEN = credentials('sonar-token') // Add SonarQube token as Jenkins credential
         SONAR_HOST_URL = 'https://sq-chiqors.loca.lt' // SonarQube URL
+        PATH = "${tool 'NodeJS_18'}/bin:${env.PATH}" // Ensure Node.js is available globally
     }
 
     stages {
