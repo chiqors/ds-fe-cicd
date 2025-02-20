@@ -3,9 +3,7 @@ pipeline {
 
     environment {
         SONAR_TOKEN = credentials('sonar-token') // Add SonarQube token as Jenkins credential
-        SONAR_HOST_URL = 'https://sq-chiqors.loca.lt'
-        DOCKER_USERNAME = credentials('DOCKER_USERNAME') // Add Docker Hub username as Jenkins credential
-        DOCKER_PASSWORD = credentials('DOCKER_PASSWORD') // Add Docker Hub password as Jenkins credential
+        SONAR_HOST_URL = 'https://sq-chiqors.loca.lt' // SonarQube URL
     }
 
     stages {
@@ -114,7 +112,9 @@ pipeline {
 
     post {
         always {
-            cleanWs() // Clean workspace after build
+            node {
+                cleanWs() // Clean workspace after build
+            }
         }
     }
 }
