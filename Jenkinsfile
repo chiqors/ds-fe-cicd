@@ -35,9 +35,9 @@ pipeline {
             steps {
                 withSonarQubeEnv('SonarQube') {
                     // Use the SonarQube Scanner tool installed in Jenkins
-                    tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+                    def scannerHome = tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
                     sh '''
-                        sonar-scanner 
+                        ${scannerHome}/bin/sonar-scanner 
                             -Dsonar.projectKey=ds-fe-cid
                             -Dsonar.sources=.
                             -Dsonar.projectBaseDir=./frontend
