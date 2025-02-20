@@ -36,7 +36,13 @@ pipeline {
                 withSonarQubeEnv('SonarQube') {
                     // Use the SonarQube Scanner tool installed in Jenkins
                     tool name: 'SonarScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-                    sh 'sonar-scanner -Dsonar.projectKey=ds-fe-cid'
+                    sh '''
+                        sonar-scanner 
+                            -Dsonar.projectKey=ds-fe-cid
+                            -Dsonar.sources=.
+                            -Dsonar.projectBaseDir=./frontend
+                            -Dsonar.exclusions=**/node_modules/**,**/dist/**,**/coverage/**
+                    '''
                 }
             }
         }
