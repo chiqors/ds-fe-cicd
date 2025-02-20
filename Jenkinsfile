@@ -94,10 +94,11 @@ pipeline {
         stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                     sh '''
-                    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-                    docker tag ds-fe chiqors/ds-fe:latest
-                    docker push chiqors/ds-fe:latest
+                        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+                        docker tag ds-fe chiqors/ds-fe:latest
+                        docker push chiqors/ds-fe:latest
                     '''
                 }
             }
